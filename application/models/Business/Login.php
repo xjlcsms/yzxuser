@@ -134,6 +134,10 @@ class LoginModel  extends \Business\AbstractModel{
             return $this->getMsg(23203, false);
         }
 
+        if($memberModel->getIsdel() == 1){
+            return $this->getMsg(23220, false);
+        }
+
         $lastTime = $memberModel->getUpdated_at();
 
 //        $memberMapper->lastLogin($memberModel);
