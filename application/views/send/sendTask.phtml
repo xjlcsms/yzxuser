@@ -40,7 +40,7 @@
                   <div class="col-sm-2">
                     <div class="dataTables_filter">
                       <label>
-                        <select class="form-control input-sm">
+                        <select class="form-control input-sm" id="selectPage">
                           <option value="10">10</option>
                           <option value="25">25</option>
                           <option value="50">50</option>
@@ -80,6 +80,7 @@
                         </tr>
                       </tbody>
                     </table>
+                    <?php //echo $this->renderTpl('public/pagination.phtml',array(),'index');?>
                   </div>
                 </div>
               </div>
