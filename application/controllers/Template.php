@@ -21,11 +21,15 @@ class TemplateController extends \Base\ApplicationController
         $where = ['user_id'=>$user->getId()];
         $status = $this->getParam('status',100,'int');
         $type = $this->getParam('type',0,'int');
+        $classify = $this->getParam('classify',0,'int');
         $sign = $this->getParam('sign','','string');
         $userId = $this->getParam('userId','','int');
         $tempId = $this->getParam('tempid','','int');
         if($tempId){
             $where['template_id'] = $tempId;
+        }
+        if($classify){
+            $where['classify'] =$classify;
         }
         if($status !=100){
             $where['status'] = $status;
@@ -49,6 +53,7 @@ class TemplateController extends \Base\ApplicationController
         $this->assign('pager', $pager);
         $this->assign('userId', $userId);
         $this->assign('status', $status);
+        $this->assign('classify', $classify);
         $this->assign('type', $type);
         $this->assign('sign', $sign);
         $this->assign('types',$this->_templateTypes);
