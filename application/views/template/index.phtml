@@ -26,12 +26,18 @@
                       <label>
                         <select class="form-control input-sm">
                             <option value="0">全部</option>
+                            <?php foreach ($this->accounts as $key =>$value):?>
+                                <option value="<?php echo $key;?>" <?php echo $key==$this->classify?'selected':'';?>><?php echo $value;?></option>
+                            <?php endforeach;?>
                         </select>
                       </label>
                       <span>模板类型</span>
                       <label>
                         <select class="form-control input-sm">
                             <option value="0">全部</option>
+                            <?php foreach ($this->types as $key =>$value):?>
+                                <option value="<?php echo $key;?>" <?php echo $key==$this->type?'selected':'';?>><?php echo $value;?></option>
+                            <?php endforeach;?>
                         </select>
                       </label>
                       <label>
@@ -76,21 +82,27 @@
                           <th>原因</th>
                         </tr>
                       </thead>
-                          <tbody>
-                            <tr>
-                              <td style="line-height: 34px">模板ID</td>
-                              <td style="line-height: 34px">模板属性</td>
-                              <td style="line-height: 34px">模板类型</td>
-                              <td style="line-height: 34px">模板内容</td>
-                              <td style="line-height: 34px">短信签名</td>
-                              <td style="line-height: 34px">创建时间</td>
-                              <td style="line-height: 34px">审核状态</td>
-                              <td style="line-height: 34px">原因</td>
-                            </tr>
-                          </tbody>
-                          <!-- <tbody>
-                          <tr><td colspan="16">没有找到用户</td></tr>
-                          </tbody> -->
+                        <?php if(!empty($this->pager->getList())):?>
+                            <?php $mapper = \Mapper\UsersModel::getInstance();?>
+                            <?php foreach ($this->pager->getList() as $key=>$value):?>
+                                <tbody>
+                                <tr>
+                                    <td style="line-height: 34px"><?php echo $value['id'];?></td>
+                                    <td style="line-height: 34px"><?php echo $this->accounts[$value['classify']]?></td>
+                                    <td style="line-height: 34px"><?php echo $this->types[$value['type']]?></td>
+                                    <td style="line-height: 34px;overflow: hidden;"><p style="width: 100px;cursor: pointer;" class="showcontent"><?php echo $value['content']?></p></td>
+                                    <td style="line-height: 34px"><?php echo $value['sign']?></td>
+                                    <td style="line-height: 34px"><?php echo $value['created_at']?></td>
+                                    <td style="line-height: 34px"><?php echo $this->templateStatus[$value['status']]?></td>
+                                    <td style="line-height: 34px"><?php echo $value['reason']?></td>
+                                </tr>
+                                </tbody>
+                            <?php endforeach;?>
+                        <?php else:?>
+                            <tbody>
+                            <tr><td colspan="16">没有找到模板</td></tr>
+                            </tbody>
+                        <?php endif;?>
                     </table>
                   </div>
                 </div>

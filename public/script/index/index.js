@@ -14,11 +14,13 @@
   $('#changeShowStatus').click(function() {
     if (showStatus === true) {
       $('#changeShowStatus i').removeClass('fa-eye-slash').addClass('fa-eye');
-      $('#pwdText').text('hzr0121');
+      $('#noShowPwd').addClass('none');
+      $('#showPwd').removeClass('none');
       showStatus = false;
     } else {
       $('#changeShowStatus i').removeClass('fa-eye').addClass('fa-eye-slash');
-      $('#pwdText').text('*******');
+      $('#noShowPwd').removeClass('none');
+      $('#showPwd').addClass('none');
       showStatus = true;
     }
   })

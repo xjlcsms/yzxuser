@@ -5,6 +5,9 @@
       .tile_count .tile_stats_count .tile-num {
         font-size: 40px
       }
+      .none {
+        display: none;
+      }
     </style>
     <div class="right_col" role="main">
       <div class="">
@@ -32,9 +35,10 @@
             <div class="count green"><span id="tempnum" class="tile-num"></span>条</div>
           </div>
           <div class="col-md-offset-2 col-md-4">
-            <p style="font-size: 16px">接口帐号：<span>hzr0121</span></p>
+            <p style="font-size: 16px">接口帐号：<span><?php echo $loginUser->getAccount();?></span></p>
             <p style="font-size: 16px;line-height: 16px">接口密码：
-              <span id="pwdText">*******</span>
+              <span id="noShowPwd" class="">*******</span>
+              <span id="showPwd" class="none"><?php echo $loginUser->getRaw_password();?></span>
               <span class="fa-hover" style="padding-left: 30px">
                 <a id="changeShowStatus">
                   <i class="fa fa-eye-slash"></i>

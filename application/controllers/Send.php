@@ -30,7 +30,7 @@ class SendController extends \Base\ApplicationController{
      /**
      * 发送记录
      */
-    public function sendRecordsAction(){
+    public function sendRecordAction(){
         
     }
     /**
