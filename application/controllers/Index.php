@@ -8,7 +8,6 @@ class IndexController extends \Base\ApplicationController
         $this->assign('user',$user->toArray());
     }
 
-
     /**
      * 修改账号密码
      * @return false
