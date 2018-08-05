@@ -8,13 +8,18 @@
     </style>
     <div class="right_col" role="main">
       <div class="">
+        <div class="row x_title">
+          <div class="col-md-12">
+            <h3>首页</h3>
+          </div>
+        </div>
          <!-- 首页 start -->
         <div class="row x_title">
           <div class="col-md-6">
-            <h3>首页</h3>
+            <h3 style="font-size: 18px">账户余额</h3>
           </div>
           <div class="col-md-6">
-            <h3>API接口信息</h3>
+            <h3 style="font-size: 18px">API接口信息</h3>
           </div>
         </div>
         <div class="row tile_count">
@@ -28,7 +33,14 @@
           </div>
           <div class="col-md-offset-2 col-md-4">
             <p style="font-size: 16px">接口帐号：<span>hzr0121</span></p>
-            <p style="font-size: 16px">接口密码：<span>*******</span></p>
+            <p style="font-size: 16px;line-height: 16px">接口密码：
+              <span id="pwdText">*******</span>
+              <span class="fa-hover" style="padding-left: 30px">
+                <a id="changeShowStatus">
+                  <i class="fa fa-eye-slash"></i>
+                </a>
+              </span>
+            </p>
           </div>
         </div>
         <!-- 任务统计 end -->
@@ -36,7 +48,7 @@
         <!-- 今日统计信息 start -->
         <div class="row x_title">
           <div class="col-md-6">
-            <h3>今日统计</h3>
+            <h3 style="font-size: 18px">今日统计</h3>
           </div>
         </div>
         <div class="row tile_count">

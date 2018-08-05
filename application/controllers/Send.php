@@ -16,6 +16,24 @@ class SendController extends \Base\ApplicationController{
     }
 
     /**
+     * 发送任务
+     */
+    public function sendTaskAction(){
+        
+    }
+     /**
+     * 数据统计
+     */
+    public function dataAction(){
+        
+    }
+     /**
+     * 发送记录
+     */
+    public function sendRecordsAction(){
+        
+    }
+    /**
      * 发送短信
      * @return false
      * @throws Exception
@@ -224,8 +242,5 @@ class SendController extends \Base\ApplicationController{
         readfile(APPLICATION_PATH.'/data/sms_template.xlsx');
         exit();
     }
-
-
-
 
 }
