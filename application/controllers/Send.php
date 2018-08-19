@@ -18,19 +18,106 @@ class SendController extends \Base\ApplicationController{
     /**
      * 发送任务
      */
-    public function sendTaskAction(){
-        
+    public function sendtaskAction(){
+        $user = \Business\LoginModel::getInstance()->getLoginUser();
+        $where =array('user_id'=>$user->getId());
+        $time = $this->getParam('time','','string');
+        if(!empty($time)){
+            $timeArr = explode('-',$time);
+            $begin = date('Y-m-d',strtotime(trim($timeArr[0])));
+            $end = date('Y-m-d',strtotime(trim($timeArr[1])));
+            $where[] = "created_at >='".$begin." 00:00:00' and created_at <= '".$end." 23:59:59'";
+        }
+        $this->assign('time',$time);
+        $type = $this->getParam('type',0,'int');
+        if($type){
+            $where['sms_type'] = $type;
+        }
+        $this->assign('type',$type);
+        $sign = $this->getParam('sign','','string');
+        if($sign){
+            $where[] = "sign like '%".$sign."%'";
+        }
+        $this->assign('sign',$sign);
+        $content = $this->getParam('content','','string');
+        if($content){
+            $where[] = "content like '%".$content."%'";
+        }
+        $this->assign('content',$content);
+        $mapper = \Mapper\SendtasksModel::getInstance();
+        $select = $mapper->select();
+        $select->where($where);
+        $select->order(array('created_at desc'));
+        $page = $this->getParam('page', 1, 'int');
+        $pagelimit = $this->getParam('pagelimit', 15, 'int');
+        $pager = new \Ku\Page($select, $page, $pagelimit, $mapper->getAdapter());
+        $this->assign('pager', $pager);
+        $this->assign('pagelimit', $pagelimit);
+        $this->assign('types', $this->_sendTypes);
+        $this->assign('statusData', array('待发送','成功','失败'));
+
     }
      /**
      * 数据统计
      */
     public function dataAction(){
-        
+        $user = \Business\LoginModel::getInstance()->getLoginUser();
+        $where =array('user_id'=>$user->getId());
+        $time = $this->getParam('time','','string');
+        if(!empty($time)){
+            $timeArr = explode('-',$time);
+            $begin = date('Y-m-d',strtotime(trim($timeArr[0])));
+            $end = date('Y-m-d',strtotime(trim($timeArr[1])));
+            $where[] = "created_at >='".$begin." 00:00:00' and created_at <= '".$end." 23:59:59'";
+        }
+        $type = $this->getParam('type',2,'int');
+        if($type){
+            $where['sms_type'] = $type;
+        }
+        $this->assign('type',$type);
+        $taskMapper = \Mapper\SendtasksModel::getInstance();
+        $taskes = $taskMapper->fetchAll($where,null,0,0,array('id'),false);
+        $taskIds = [];
+        if(empty($taskes)){
+            $taskIds =array(0);
+        }else{
+            foreach ($taskes as $task){
+                $taskIds[] = $task['id'];
+            }
+        }
+        $mapper = \Mapper\SmsqueueModel::getInstance();
+        $lists = $mapper->fetchAll(array('task_id in('.implode(',',$taskIds).')'));
+        $data = [];
+        $business = \Business\SmsModel::getInstance();
+        foreach ($lists as $list){
+            $date = date('Y-m-d',strtotime($list->getCreated_at()));
+            $feeone = $business->oneFee($list->getContent());
+            if (isset($data[$date])){
+                $data[$date]['total'] += $list->getTotal_num();
+                $data[$date]['success'] += $list->getSuccess();
+                $notArrive = $list->getTotal_num() - $list->getSend_num();
+                $fail = $list->getSend_num() - $list->getSuccess();
+                $data[$date]['not_arrive'] += $notArrive;
+                $data[$date]['fail'] += $fail;
+                $data[$date]['fee'] += $feeone * $list->getSend_num();
+            }else{
+                $data[$date]['total'] = $list->getTotal_num();
+                $data[$date]['success'] = $list->getSuccess();
+                $notArrive = $list->getTotal_num() - $list->getSend_num();
+                $fail = $list->getSend_num() - $list->getSuccess();
+                $data[$date]['not_arrive'] = $notArrive;
+                $data[$date]['fail'] = $fail;
+                $data[$date]['fee'] = $feeone * $list->getSend_num();
+            }
+        }
+        $this->assign('sendTypes',$this->_sendTypes);
+        $this->assign('data',$data);
+
     }
      /**
      * 发送记录
      */
-    public function sendRecordAction(){
+    public function sendrecordAction(){
         
     }
     /**
@@ -100,23 +187,32 @@ class SendController extends \Base\ApplicationController{
         $taskid = $mapper->getLastInsertId();
         $mobiles = $smsBusiness->divideMobiles($mobiles);
         $smsMapper = \Mapper\SmsqueueModel::getInstance();
+        $smsMapper->begin();
         $model = new \SmsqueueModel();
         $model->setTask_id($taskid);
         $model->setContent($content);
         $model->setType($type);
+        $model->setError('');
         foreach ($mobiles as $mobile){
+            $uid = $taskid.date('ymdHis').mt_rand(1000, 9999);
+            $model->setUid($uid);
             $data = $smsBusiness->trueMobiles($user,$mobile);
             $model->setCreated_at(date('Ymdhis'));
-            $model->setNot_arrive(implode(',',$data['fail']));
-            $model->setMobiles(implode(',',$data['true']));
+            $fail = empty($fail)?'':implode(',',$fail);
+            $model->setNot_arrive($fail);
+            $true = implode(',',$data['true']);
+            $model->setMobiles(empty($true)?'':$true);
             $model->setSend_num(count($data['true']));
             $model->setTotal_num(count($mobile));
             $res = $smsMapper->insert($model);
-            if(!$res){
-                $mapper->rollback();
-                return $this->returnData('发送失败',36002);
+            if($res === false){
+                $smsMapper->rollback();
+                \Mapper\SendtasksModel::getInstance()->update(array('status'=>2),array('id'=>$taskid));
+                return $this->returnData('发送失败',29200);
             }
         }
+        \Mapper\SendtasksModel::getInstance()->update(array('status'=>1),array('id'=>$taskid));
+        $smsMapper->commit();
         return $this->returnData('发送成功',29201);
     }
 

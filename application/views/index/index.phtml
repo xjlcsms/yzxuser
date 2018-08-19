@@ -28,11 +28,11 @@
         <div class="row tile_count">
           <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-comments-o"></i>行业短信</span>
-            <div class="count green"><span id="jobnum" class="tile-num"></span>条</div>
+            <div class="count green"><?php echo $loginUser->getShow_normal_balance();?></span>条</div>
           </div>
           <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-comments-o"></i>营销短信</span>
-            <div class="count green"><span id="tempnum" class="tile-num"></span>条</div>
+            <div class="count green"><?php echo $loginUser->getShow_marketing_balance();?></span>条</div>
           </div>
           <div class="col-md-offset-2 col-md-4">
             <p style="font-size: 16px">接口帐号：<span><?php echo $loginUser->getAccount();?></span></p>

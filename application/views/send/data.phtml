@@ -16,10 +16,9 @@
                       <span>短信类型</span>
                       <label>
                         <select class="form-control input-sm">
-                            <option value="">请选择</option>
-                            <option value="1">验证码</option>
-                            <option value="2">通知</option>
-                            <option value="3">营销</option>
+                            <?php foreach ($this->sendTypes as $key =>$value):?>
+                                <option value="<?php echo $key;?>" <?php echo $key==$this->type?'selected':'';?>><?php echo $value;?></option>
+                            <?php endforeach;?>
                         </select>
                       </label>
                       <div id="reportrange_right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;display: inline-block;">
@@ -57,19 +56,26 @@
                           <th>失败条数</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                            <td style="line-height: 34px">11</td>
-                            <td style="line-height: 34px">11</td>
-                            <td style="line-height: 34px">111</td>
-                            <td style="line-height: 34px">111</td>
-                            <td style="line-height: 34px">111</td>
-                            <td style="line-height: 34px">111</td>
-                            <td style="line-height: 34px">111</td>
-                        </tr>
-                      </tbody>
+                    <?php if(!empty($this->data)):?>
+                        <?php foreach ($this->data as $key=>$value):?>
+                            <tbody>
+                                <tr>
+                                    <td style="line-height: 34px"><?php echo $key;?></td>
+                                    <td style="line-height: 34px"><?php echo $this->sendTypes[$this->type];?></td>
+                                    <td style="line-height: 34px"><?php echo $value['total'];?></td>
+                                    <td style="line-height: 34px"><?php echo $value['fee'];?></td>
+                                    <td style="line-height: 34px"><?php echo $value['success'];?></td>
+                                    <td style="line-height: 34px"><?php echo $value['not_arrive'];?></td>
+                                    <td style="line-height: 34px"><?php echo $value['fail'];?></td>
+                                </tr>
+                            </tbody>
+                        <?php endforeach;?>
+                      <?php else:?>
+                          <tbody>
+                          <tr><td colspan="16">没有找到模板</td></tr>
+                          </tbody>
+                      <?php endif;?>
                     </table>
-                    <?php //echo $this->renderTpl('public/pagination.phtml',array(),'index');?>
                   </div>
                 </div>
               </div>

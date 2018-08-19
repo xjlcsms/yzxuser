@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 你可能需要修改下这个路径
-prefix='/web/wwwroot/sifangqian.com/sfqv3/www/script'
+prefix='/var/www/html/my/yzxuser/script'
 
 arg=();
 
@@ -19,4 +19,4 @@ for((i=1;i<=$#;i++)); do
     arg[i]=$pv
 done
 
-/web/php70/bin/php -f ${prefix}"/gorm.php" ${arg[*]}
+/usr/local/php/bin/php -f ${prefix}"/gorm.php" ${arg[*]}

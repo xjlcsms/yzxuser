@@ -40,6 +40,26 @@ class SmsModel  extends \Business\AbstractModel
         return $result;
     }
 
+    /**api发送短信
+     * @param \UsersModel $user
+     * @param \SmsrecordModel $order
+     * @param $content
+     * @return mixed
+     * @throws \Exception
+     */
+    public function smsApi(\UsersModel $user,$mobile,$content){
+        $smser = new \Ku\Sms\Adapter('yunzhixun');
+        $driver = $smser->getDriver();
+        $driver->setType(4);
+        $driver->setAccount($user->getAccount());
+        $driver->setPassword($user->getRaw_password());
+        $driver->setMsg($content);
+//        $uid = date('ymdHis').mt_rand(1000, 9999);
+//        $driver->setUid($uid);
+        $driver->setPhones($mobile);
+        $result = $driver->send();
+        return $result;
+    }
 
     /**发送验证
      * @param \UsersModel $user
@@ -174,23 +194,28 @@ class SmsModel  extends \Business\AbstractModel
      * @return bool
      */
     public function pullAll(array $result){
-        $mapper = \Mapper\SmsqueueModel::getInstance();
-        $uid = $result['uid'];
-        $queue = $mapper->findByUid($uid);
-        if(!$queue instanceof \SmsqueueModel){
-            return $this->getMsg('没有找到对应的uid队列',10020);
+        $mapper = \Mapper\SmsrecordModel::getInstance();
+        $sid = $result['sid'];
+        $order = $mapper->fetch(array('sid'=>$sid,'phone'=>$result['mobile']));
+        if(!$order instanceof \SmsrecordModel){
+            return $this->getMsg(10020,'没有找到对应的sid订单:'.$sid);
         }
-        $pull = json_decode($queue->getPull());
-        if(empty($pull)){
-            $pull = [];
-        }
-        array_push($pull,$result);
         $mapper->begin();
-        $update = array('pull'=>json_encode($pull),'pull_num'=>'pull_num+1','updated_at'=>date('Ymdhis'));
-        $res = $mapper->update($update,array('Id'=>$queue->getId()));
+        $order->setDesc($result['desc']);
+        $order->setArrivaled_at(date('YmdHis',strtotime($result['user_receive_time'])));
+        $order->setUpdated_at(date('YmsHis'));
+        $order->setReport_status($result['report_status']);
+        $order->setStatus($result['report_status']=='SUCCESS'?2:1);
+        $res = $mapper->update($order);
         if(!$res){
             $mapper->rollback();
-            return $this->getMsg(10022,'更新数据失败');
+            return $this->getMsg(10022,'更新订单数据失败');
+        }
+        $update = array('pull_num'=>'pull_num+1','updated_at'=>date('Ymdhis'));
+        $res = \Mapper\SmsqueueModel::getInstance()->update($update,array('uid'=>$order->getUid()));
+        if(!$res){
+            $mapper->rollback();
+            return $this->getMsg(10022,'更新发送队列数据失败');
         }
         $mapper->commit();
         return $res;
