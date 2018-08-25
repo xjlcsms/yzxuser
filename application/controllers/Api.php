@@ -94,8 +94,8 @@ class ApiController extends \Base\AbstractController{
             'account'=>'b00783','password'=>substr(md5('b127d1f1'),-32),
             'sign'=>'API测试','content'=>'测试发送消息','mobile'=>$mobile
         );
-//        $url = 'http://yzx.cddong.top/index/api/sms';
-        $url = 'http://www.yzxuser.com/index/api/sms';
+        $url = 'http://yzx.cddong.top/index/api/sms';
+//        $url = 'http://www.yzxuser.com/index/api/sms';
         $http = new \Ku\Http();
         $http->setUrl($url);
         $http->setParam($data,true);
