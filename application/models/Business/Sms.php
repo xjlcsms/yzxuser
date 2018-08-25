@@ -42,8 +42,9 @@ class SmsModel  extends \Business\AbstractModel
 
     /**api发送短信
      * @param \UsersModel $user
-     * @param \SmsrecordModel $order
+     * @param $mobile
      * @param $content
+     * @param string $uid
      * @return mixed
      * @throws \Exception
      */
@@ -54,7 +55,7 @@ class SmsModel  extends \Business\AbstractModel
         $driver->setAccount($user->getAccount());
         $driver->setPassword($user->getRaw_password());
         $driver->setMsg($content);
-//        $uid = date('ymdHis').mt_rand(1000, 9999);
+//        $uid = $uid?$uid:date('ymdHis').mt_rand(1000, 9999);
 //        $driver->setUid($uid);
         $driver->setPhones($mobile);
         $result = $driver->send();

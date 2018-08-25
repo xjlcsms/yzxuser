@@ -118,7 +118,44 @@ class SendController extends \Base\ApplicationController{
      * 发送记录
      */
     public function sendrecordAction(){
-        
+        $mapper = \Mapper\SmsrecordModel::getInstance();
+        $user = \Business\LoginModel::getInstance()->getLoginUser();
+        $where =array('user_id'=>$user->getId());
+        $mobile = $this->getParam('mobile','','string');
+        $status = $this->getParam('status',100,'int');
+        $report_status = $this->getParam('report_status',100,'int');
+        if(!empty($mobile)){
+            $where['mobile'] = $mobile;
+        }
+        $this->assign('mobile',$mobile);
+        if ($status != 100){
+            $where['status'] = $status;
+        }
+        $this->assign('status',$status);
+        if ($report_status != 100){
+            $where['report_status'] = $report_status;
+        }
+        $this->assign('report_status',$report_status);
+        $type = $this->getParam('type',0,'int');
+        if($type){
+            $where['sms_type'] = $type;
+        }
+        $this->assign('type',$type);
+        $taskId = $this->getParam('taskId',0,'int');
+        if($taskId){
+            $where['task_id'] = $taskId;
+        }
+        $this->assign('taskId',$taskId);
+        $select = $mapper->select();
+        $select->where($where);
+        $select->order(array('created_at desc'));
+        $page = $this->getParam('page', 1, 'int');
+        $pagelimit = $this->getParam('pagelimit', 15, 'int');
+        $pager = new \Ku\Page($select, $page, $pagelimit, $mapper->getAdapter());
+        $this->assign('pager', $pager);
+        $this->assign('pagelimit', $pagelimit);
+        $this->assign('types', $this->_sendTypes);
+        $this->assign('statusData', array('待发送','成功','失败'));
     }
     /**
      * 发送短信

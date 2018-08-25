@@ -71,7 +71,11 @@ class ApiController extends \Base\AbstractController{
         }
         $order->setCreated_at(date('YmdHis'));
         $recordMapper->insert($order);
-        return $this->returnData('发送成功',1,true);
+        $sendData = array('sid'=>$order->getSid(),'mobile'=>$mobile,'content'=>$content,'send_time'=>$order->getCreated_at());
+        if ($order->getStatus() == 1){
+            return $this->returnData('发送成功',1,true,$sendData);
+        }
+        return $this->returnData($order->getMessage(),108);
     }
 
 
