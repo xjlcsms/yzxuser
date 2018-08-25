@@ -122,12 +122,17 @@ class SendController extends \Base\ApplicationController{
         $user = \Business\LoginModel::getInstance()->getLoginUser();
         $where =array('user_id'=>$user->getId());
         $mobile = $this->getParam('mobile','','string');
+        $content = $this->getParam('content','','string');
         $status = $this->getParam('status',100,'int');
         $report_status = $this->getParam('report_status',100,'int');
         if(!empty($mobile)){
             $where['mobile'] = $mobile;
         }
         $this->assign('mobile',$mobile);
+        if($content){
+            $where[] = "content like '%".$content."%'";
+        }
+        $this->assign('content',$content);
         if ($status != 100){
             $where['status'] = $status;
         }
@@ -202,7 +207,6 @@ class SendController extends \Base\ApplicationController{
             $redis->lPush($key,json_encode(array('userid'=>$user->getId(),'type'=>$account.'_show','fee'=>$totalfee)));
         }
         $mapper = \Mapper\SendtasksModel::getInstance();
-        $mapper->begin();
         $senTask = new \SendtasksModel();
         $senTask->setUser_id($user->getId());
         $senTask->setSign($sign);
@@ -218,7 +222,6 @@ class SendController extends \Base\ApplicationController{
         $senTask->setBilling_amount($totalfee);
         $res =$mapper->insert($senTask);
         if(!$res){
-            $mapper->rollback();
             return $this->returnData('发送失败',36000);
         }
         $taskid = $mapper->getLastInsertId();

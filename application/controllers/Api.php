@@ -10,7 +10,7 @@ class ApiController extends \Base\AbstractController{
 
     public function smsAction(){
         $account = $this->getParam('account','','string');
-        $pwd = $this->getParam('pwd','','string');
+        $pwd = $this->getParam('password','','string');
         $mobile = $this->getParam('mobile','','string');
         $content = $this->getParam('content','','string');
         $sign = $this->getParam('sign','','string');
@@ -59,6 +59,7 @@ class ApiController extends \Base\AbstractController{
         $order->setUid($data['uid']);
         $order->setSid($data['sid']);
         $order->setPhone($data['mobile']);
+        $order->setContent($content);
         $order->setMasked_phone($data['mobile']);
         $order->setBilling_count($data['fee']);
         $order->setCode($data['code']);
@@ -71,11 +72,11 @@ class ApiController extends \Base\AbstractController{
         }
         $order->setCreated_at(date('YmdHis'));
         $recordMapper->insert($order);
-        $sendData = array('sid'=>$order->getSid(),'mobile'=>$mobile,'content'=>$content,'send_time'=>$order->getCreated_at());
+        $sendData = array('fee'=>$fee,'sid'=>$order->getSid(),'mobile'=>$mobile,'content'=>$content,'send_time'=>$order->getCreated_at());
         if ($order->getStatus() == 1){
-            return $this->returnData('发送成功',1,true,$sendData);
+            return $this->returnData('发送成功',0,true,$sendData);
         }
-        return $this->returnData($order->getMessage(),108);
+        return $this->returnData($order->getMessage(),$order->getCode());
     }
 
 
