@@ -34,7 +34,8 @@ class ApiController extends \Base\AbstractController{
         if(!$user instanceof \UsersModel){
             return $this->returnData('账号不存在',104);
         }
-        if(\Ku\Tool::valid($pwd, $user->getPassword()) === false){
+        $userPwd = substr(md5($user->getRaw_password()),-32);
+        if(strcmp($userPwd,$pwd) !== 0 ){
             return $this->returnData('密码不正确',105);
         }
         $business = \Business\SmsModel::getInstance();
@@ -81,5 +82,25 @@ class ApiController extends \Base\AbstractController{
         return $this->returnData($order->getMessage(),$order->getCode());
     }
 
+
+    public function testAction(){
+        $mobile = $this->getParam('mobile','','string');
+        if(!\Ku\Verify::isMobile($mobile)){
+            return $this->returnData('手机号不正确',1000);
+        }
+        $data = array(
+            'account'=>'b00783','password'=>substr(md5('b127d1f1'),-32),
+            'sign'=>'API测试','content'=>'测试发送消息','mobile'=>$mobile
+        );
+        $url = 'http://yzx.cddong.top/index/api/sms';
+        $http = new \Ku\Http();
+        $http->setUrl($url);
+        $http->setParam($data,true,true);
+        $http->setTimeout(3);
+        $send = $http->send();
+        $send = json_decode($send,true);
+        var_dump($send);
+        return false;
+    }
 
 }
