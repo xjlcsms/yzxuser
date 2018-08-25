@@ -95,7 +95,7 @@ class ApiController extends \Base\AbstractController{
         $url = 'http://yzx.cddong.top/index/api/sms';
         $http = new \Ku\Http();
         $http->setUrl($url);
-        $http->setParam($data,true,true);
+        $http->setParam($data,true);
         $http->setTimeout(3);
         $send = $http->send();
         $send = json_decode($send,true);
