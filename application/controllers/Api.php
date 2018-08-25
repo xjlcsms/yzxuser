@@ -16,6 +16,8 @@ class ApiController extends \Base\AbstractController{
         $mobile = $this->getParam('mobile','','string');
         $content = $this->getParam('content','','string');
         $sign = $this->getParam('sign','','string');
+//        $data = array($account,$pwd,$mobile,$content);
+//        return $this->returnData('111',0221,true,$data);
         if(empty($account) || empty($pwd) || empty($mobile) || empty($content) || empty($sign)){
             return $this->returnData('参数错误',100);
         }
@@ -92,12 +94,16 @@ class ApiController extends \Base\AbstractController{
             'account'=>'b00783','password'=>substr(md5('b127d1f1'),-32),
             'sign'=>'API测试','content'=>'测试发送消息','mobile'=>$mobile
         );
-        $url = 'http://yzx.cddong.top/index/api/sms';
+//        $url = 'http://yzx.cddong.top/index/api/sms';
+        $url = 'http://www.yzxuser.com/index/api/sms';
         $http = new \Ku\Http();
         $http->setUrl($url);
         $http->setParam($data,true);
         $http->setTimeout(3);
         $send = $http->send();
+        if($send ==false){
+            return $this->returnData('失败');
+        }
         $send = json_decode($send,true);
         var_dump($send);
         return false;
