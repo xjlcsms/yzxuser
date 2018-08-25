@@ -179,7 +179,7 @@ class SendController extends \Base\ApplicationController{
         $smsBusiness = \Business\SmsModel::getInstance();
         if($smstype == 1){
             $smsfile = $this->getParam('smsfile','','string');
-            if(!file_exists(APPLICATION_PATH.'/public/uploads/sms/'.$smsfile || empty($smsfile))){
+            if(!file_exists(APPLICATION_PATH.'/public/uploads/sms/'.$smsfile) || empty($smsfile)){
                 return $this->returnData('发送文件不存在',29200);
             }
             $mobiles = $smsBusiness->importMobiles($smsfile);
@@ -266,6 +266,9 @@ class SendController extends \Base\ApplicationController{
         $type = $this->getParam('type',0,'int');
         $tempId = $this->getParam('tempId',0,'int');
         $amount = $this->getParam('amount',0,'int');
+        if(empty($amount)){
+            return $this->returnData('短信数量不能为空',1000);
+        }
         $content = $this->getParam('content','','string');
         $sign = $this->getParam('sign','','string');
         $mapper = \Mapper\SendtasksModel::getInstance();
