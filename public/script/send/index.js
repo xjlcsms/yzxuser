@@ -10,11 +10,11 @@
       $(this).val(val);
     }
 
-    end = content.indexOf(']');
+    end = content.indexOf('】');
     if (end > -1) {
       content = content.substring(end + 1);
     }
-    title = '[' + val + ']';
+    title = '【' + val + '】';
     content = title + '' + content;
     showLen(content);
   });
@@ -109,22 +109,27 @@
         smsfile: $('#fileName').text(),
         mobiles: $('#phoneText').val()
       }
-      console.log(params)
       $.post('/index/send/sms', params, function(res) {
-        console.log(res)
+        if (res.status === true) {
+          alert(res.msg);
+          window.location.href="/index/send/sendtask";
+        }
       })
     } else {
       // 信嘉联创代发
       var params = {
         type: $('input[name="type"]:checked').val(),
         tempId: 0,
-        amount: 0,
+        area: $('input[name="area"]').val(),
+        amount: $('input[name="quantity"]').val(),
         content: $('#content').val(),
         sign: $('#sign').val(),
       }
-      console.log(params)
       $.post('/index/send/syssms', params, function(res) {
-        console.log(res)
+        if (res.status === true) {
+          alert(res.msg);
+          window.location.href="/index/send/sendtask";
+        }
       })
     }
   })

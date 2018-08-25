@@ -6,7 +6,9 @@
  * Time: 23:14
  */
 class ApiController extends \Base\AbstractController{
-
+    public function indexAction(){
+        
+    }
 
     public function smsAction(){
         $account = $this->getParam('account','','string');

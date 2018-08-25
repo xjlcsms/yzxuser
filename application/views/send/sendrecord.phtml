@@ -13,38 +13,36 @@
               <div class="dataTables_wrapper dt-bootstrap no-footer">
                 <div class="row">
                   <div class="col-sm-10">
+                    <form class="search-form">
                       <input type="hidden" name="taskId" value="<?php echo $this->taskId;?>">
                       <label>
-                        <input type="text" class="form-control input-sm" placeholder="请输入手机号">
+                        <input type="text" class="form-control input-sm" placeholder="请输入手机号" name="mobile" value="<?php echo $this->mobile;?>">
                       </label>
                       <label>
-                        <input type="text" class="form-control input-sm" placeholder="请输入内容">
+                        <input type="text" class="form-control input-sm" placeholder="请输入内容" name="content" value="<?php echo $this->content;?>">
                       </label>
                       <span>发送状态</span>
                       <label>
-                        <select class="form-control input-sm">
-                            <option value="0">全部</option>
-                            <option value="1">发送中</option>
-                            <option value="2">发送失败</option>
-                            <option value="3">发送成功</option>
+                        <select class="form-control input-sm" name="statusData">
+                          <?php foreach ($this->statusData as $key =>$value):?>
+                            <option value="<?php echo $key;?>" <?php echo $key==$this->status?'selected':'';?>><?php echo $value;?></option>
+                          <?php endforeach;?>
                         </select>
                       </label>
                       <span>到达状态</span>
                       <label>
                         <select class="form-control input-sm">
                             <option value="0">全部</option>
-                            <option value="1">发送中</option>
-                            <option value="2">发送失败</option>
-                            <option value="3">发送成功</option>
+                            <option value="1">已到达</option>
+                            <option value="2">未到达</option>
                         </select>
                       </label>
                       <div id="reportrange_right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;display: inline-block;">
                         <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
                         <span></span> <b class="caret"></b>
                       </div>
-                    <a class="btn btn-primary btn-sm">
-                      搜索
-                    </a>
+                      <button class="btn btn-primary btn-sm">搜索</button>
+                    </form>
                   </div>
                   <div class="col-sm-2">
                     <div class="dataTables_filter">

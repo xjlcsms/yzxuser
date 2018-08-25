@@ -266,6 +266,7 @@ class SendController extends \Base\ApplicationController{
         $type = $this->getParam('type',0,'int');
         $tempId = $this->getParam('tempId',0,'int');
         $amount = $this->getParam('amount',0,'int');
+        $area = $this->getParam('area','','string');
         if(empty($amount)){
             return $this->returnData('短信数量不能为空',1000);
         }
@@ -284,6 +285,7 @@ class SendController extends \Base\ApplicationController{
         $senTask->setUpdated_at(date('Y-m-d H:i:s'));
         $senTask->setTemplate_id($tempId);
         $senTask->setStatus(0);
+         $senTask->setArea($area);
         $senTask->setQuantity($amount);
         $senTask->setBilling_count($onefee);
         $senTask->setBilling_amount($onefee*$amount);
