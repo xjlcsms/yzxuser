@@ -5,7 +5,7 @@
  * Date: 2018/7/30
  * Time: 23:14
  */
-class ApiController extends \Base\AbstractController{
+class ApiController extends \Base\ApplicationController{
     public function indexAction(){
         
     }
