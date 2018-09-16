@@ -10,6 +10,8 @@ $(function(){
     $.get('/login/i', params, function(data){
       if (data.status === true) {
         window.location.href = '/'
+      } else {
+        alert(data.msg)
       }
     })
   })
