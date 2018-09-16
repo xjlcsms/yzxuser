@@ -21,7 +21,7 @@ class IndexController extends \Base\ApplicationController
         if(!$user instanceof \UsersModel){
             return $this->returnData('请先登陆',1200,false,array('url'=>'/login'));
         }
-        if (\Ku\Tool::valid($old, $user->getPassword(), null) === false) {
+        if (\Ku\Tool::valid($old, $user->getNew_password(), null) === false) {
             return $this->returnData('原密码错误，请重新输入',1202);
         }
         if(strlen($new) <6){
@@ -30,7 +30,7 @@ class IndexController extends \Base\ApplicationController
         if($new != $sure){
             return $this->returnData('两次输入的密码不一致',1204);
         }
-        $user->setPassword(\Ku\Tool::encryption($new));
+        $user->setNew_password(\Ku\Tool::encryption($new));
         $user->setUpdated_at(date('Y-m-d H:i:s'));
         $res = \Mapper\AdminModel::getInstance()->update($user);
         if(!$res){
