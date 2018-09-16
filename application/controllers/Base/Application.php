@@ -6,10 +6,12 @@ class ApplicationController extends \Base\AbstractController {
 
     protected $_ec = array(
         'login',
+        'api',
         );
 
     protected $_ac = array(
         'login'=>'*',
+        'api'=>'sms'
         );
 
     protected function before() {
