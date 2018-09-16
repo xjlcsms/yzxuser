@@ -60,13 +60,13 @@
                         <?php foreach ($this->data as $key=>$value):?>
                             <tbody>
                                 <tr>
-                                    <td style="line-height: 34px"><?php echo $key;?></td>
-                                    <td style="line-height: 34px"><?php echo $this->sendTypes[$this->type];?></td>
-                                    <td style="line-height: 34px"><?php echo $value['total'];?></td>
-                                    <td style="line-height: 34px"><?php echo $value['fee'];?></td>
-                                    <td style="line-height: 34px"><?php echo $value['success'];?></td>
-                                    <td style="line-height: 34px"><?php echo $value['not_arrive'];?></td>
-                                    <td style="line-height: 34px"><?php echo $value['fail'];?></td>
+                                    <td><?php echo $key;?></td>
+                                    <td><?php echo $this->sendTypes[$this->type];?></td>
+                                    <td><?php echo $value['total'];?></td>
+                                    <td><?php echo $value['fee'];?></td>
+                                    <td><?php echo $value['success'];?></td>
+                                    <td><?php echo $value['not_arrive'];?></td>
+                                    <td><?php echo $value['fail'];?></td>
                                 </tr>
                             </tbody>
                         <?php endforeach;?>
