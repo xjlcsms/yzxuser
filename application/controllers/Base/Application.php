@@ -27,6 +27,7 @@ class ApplicationController extends \Base\AbstractController {
                 }
                 exit();
             }
+           $this->assign('loginUser',$info);
         }
 
     }
