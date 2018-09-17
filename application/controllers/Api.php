@@ -37,7 +37,7 @@ class ApiController extends \Base\ApplicationController{
             return $this->returnData('账号不存在',104);
         }
         $userPwd = substr(md5($user->getRaw_password()),-32);
-        if(strcmp($userPwd,$pwd) !== 0 ){
+        if($userPwd != $pwd){
             return $this->returnData('密码不正确',105);
         }
         $business = \Business\SmsModel::getInstance();
