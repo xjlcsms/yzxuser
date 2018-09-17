@@ -36,11 +36,11 @@ class ApiController extends \Base\ApplicationController{
             return $this->returnData('账号不存在',104);
         }
         $userPwd = substr(md5($user->getRaw_password()),-32);var_dump($userPwd);var_dump($user->getRaw_password());
+        $data = array($account,$pwd,$mobile,$content);
+        return $this->returnData('111',0221,true,$data);
         if($userPwd != $pwd){
             return $this->returnData('密码不正确',105);
         }
-                $data = array($account,$pwd,$mobile,$content);
-        return $this->returnData('111',0221,true,$data);
         $business = \Business\SmsModel::getInstance();
         $fee = $business->oneFee($content);
         $virefy = $business->virefy($user,$content,1,$fee);
