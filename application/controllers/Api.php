@@ -17,8 +17,6 @@ class ApiController extends \Base\ApplicationController{
         $mobile = $this->getParam('mobile','','string');
         $content = $this->getParam('content','','string');
         $sign = $this->getParam('sign','','string');
-//        $data = array($account,$pwd,$mobile,$content);
-//        return $this->returnData('111',0221,true,$data);
         if(empty($account) || empty($pwd) || empty($mobile) || empty($content) || empty($sign)){
             return $this->returnData('参数错误',100);
         }
@@ -37,10 +35,12 @@ class ApiController extends \Base\ApplicationController{
         if(!$user instanceof \UsersModel){
             return $this->returnData('账号不存在',104);
         }
-        $userPwd = substr(md5($user->getRaw_password()),-32);
+        $userPwd = substr(md5($user->getRaw_password()),-32);var_dump($userPwd);var_dump($user->getRaw_password());
         if($userPwd != $pwd){
             return $this->returnData('密码不正确',105);
         }
+                $data = array($account,$pwd,$mobile,$content);
+        return $this->returnData('111',0221,true,$data);
         $business = \Business\SmsModel::getInstance();
         $fee = $business->oneFee($content);
         $virefy = $business->virefy($user,$content,1,$fee);
