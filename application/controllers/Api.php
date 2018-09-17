@@ -11,8 +11,9 @@ class ApiController extends \Base\ApplicationController{
     }
 
     public function smsAction(){
+        $request = $this->getRequest();
         $account = $this->getParam('account','','string');
-        $pwd = $this->getParam('password','','string');
+        $pwd = $request->get('password','');
         $mobile = $this->getParam('mobile','','string');
         $content = $this->getParam('content','','string');
         $sign = $this->getParam('sign','','string');
