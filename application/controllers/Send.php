@@ -13,6 +13,15 @@ class SendController extends \Base\ApplicationController{
      */
     public function indexAction(){
         $this->assign('sendTypes',$this->_sendTypes);
+        $user = \Business\LoginModel::getInstance()->getLoginUser();
+        $temps = \Mapper\TemplatesModel::getInstance()->fetchAll(array('user_id'=>$user->getId()));
+        $templates = [];
+        if(!empty($temps)){
+            foreach ($temps as $temp){
+                $templates[$temp->getTemolate_id()] = $temp->getContent();
+            }
+        }
+        $this->assign('templates',$templates);
     }
 
     /**
