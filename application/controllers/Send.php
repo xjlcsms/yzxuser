@@ -18,7 +18,7 @@ class SendController extends \Base\ApplicationController{
         $templates = [];
         if(!empty($temps)){
             foreach ($temps as $temp){
-                $templates[$temp->getTemolate_id()] = $temp->toArray();
+                $templates[$temp->getTemplate_id()] = $temp->toArray();
             }
         }
         $this->assign('templates',$templates);
