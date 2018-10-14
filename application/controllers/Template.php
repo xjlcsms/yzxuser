@@ -69,12 +69,12 @@ class TemplateController extends \Base\ApplicationController
     public function addAction(){
         $business = \Business\LoginModel::getInstance();
         $user = $business->getCurrentUser();
-        $type = $this->getParam('type','','int');
+        $type = $this->getParam('type','','int');//模板类型
 //        $tempId = $this->getParam('tempId','','int');
-        $classify = $this->getParam('classify','','int');
-        $sign = $this->getParam('sign','','string');
+        $classify = $this->getParam('classify','','int');//模板属性
+        $sign = $this->getParam('sign','','string');//签名
         $request = $this->getRequest();
-        $content = $request->get('content','');
+        $content = $request->get('content','');//模板内容
         if(empty($content) || empty($sign)){
             return $this->returnData('签名或内容不可为空',31001);
         }
