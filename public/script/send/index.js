@@ -1,6 +1,8 @@
 var unum = 0; // 有效号码数
 var inputLock = false;
 var tempId = 0;
+var pageNoww = 1;
+var pageTotall = 1;
 (function(){
   // 中文输入
   document.querySelector('#sign').addEventListener('compositionstart', function(){
@@ -167,34 +169,34 @@ var tempId = 0;
   })
   // 显示模板
   $('#showTemplate').click(function() {
-    $.post('/template/mytemp', function(res) {
-      if (res.status === true) {
-        var list = res.data.list
-        if (list.length !== 0) {
-          var str = '';
-          for (let i in list) {
-            str += '<tr>' + 
-                  '<td>' + list[i].template_id + '</td>' +
-                  '<td>' + list[i].classify + '</td>' +
-                  '<td>' + list[i].type + '</td>' +
-                  '<td>' + list[i].content + '</td>' +
-                  '<td>' + list[i].sign + '</td>' +
-                  '<td><a  class="importTemplate btn btn-primary btn-sm" data-id="' + list[i].template_id + '">导入</a></td>' +
-                  '</tr>'
-          }
-          $('#templateTable').append(str);
-        }
-      }
-    });
-    $('#tempModal').modal('show');
+    showTemp(1)
+  });
+  // 添加跳转事件
+  $('#pagetion').on('click', '.jumpTo', function() {
+    showTemp($(this).html())
+  });
+  $('#pagetion').on('click', '#pagePrev', function() {
+    showTemp(pageNoww - 1)
+  });
+  $('#pagetion').on('click', '#pageNext', function() {
+    showTemp(pageNoww + 1)
+  });
+  $('#pagetion').on('click', '#btnJump', function() {
+    if ($('#jumpPage').val() !== '' && parseInt($('#jumpPage').val()) <= pageTotall) {
+      showTemp($('#jumpPage').val())
+    }
   });
   // 添加导入事件
   $('#templateTable').on('click', '.importTemplate', function() {
+    var tempTitle = ''
+    tempTitle = '【' + $(this).parent().prev().html() + '】';
+    content = tempTitle + '' + $(this).parent().prev().prev().html();
     $('#sign').val($(this).parent().prev().html());
-    $('#content').val($(this).parent().prev().prev().html());
+    $('#content').val(content);
     tempId = $(this).attr('data-id');
     $('#templateTable').empty();
     $('#tempModal').modal('hide');
+    showLen(content);
   })
 })()
 
@@ -219,4 +221,83 @@ function showLen(content) {
   $('#num').text(len);
   $('#branch').text(parseInt(branch));
   $('#use').text(parseInt(branch) * unum);
+}
+
+function showTemp (page) {
+  let params = {
+    page: page,
+    pagelimit: 5
+  }
+  $.post('/template/mytemp', params, function(res) {
+    if (res.status === true) {
+      var list = res.data.list
+      if (list.length !== 0) {
+        var str = '';
+        for (let i in list) {
+          str += '<tr>' + 
+                '<td>' + list[i].template_id + '</td>' +
+                '<td>' + list[i].classify + '</td>' +
+                '<td>' + list[i].type + '</td>' +
+                '<td>' + list[i].content + '</td>' +
+                '<td>' + list[i].sign + '</td>' +
+                '<td><a  class="importTemplate btn btn-primary btn-sm" data-id="' + list[i].template_id + '">导入</a></td>' +
+                '</tr>'
+        }
+        $('#templateTable').empty();
+        $('#templateTable').append(str);
+        $('#dataTotal').text(res.data.total);
+        // 生成分页栏
+        var pageNow = res.data.page; //当前页
+        pageNoww = parseInt(pageNow);
+        var pageTotal = res.data.pageCount; // 总页数
+        pageTotall = parseInt(pageTotal);
+        var dataTotal = res.data.total; // 总条数
+        var s = ''
+        if (pageNow > 1) {
+          s = '<li class="fa-hover none" id="pagePrev">' +
+                '<a aria-label="Previous">' +
+                  '<i class="fa fa-chevron-left"></i>' +
+                '</a>' +
+              '</li>';
+        }
+        
+        if (pageTotal < 3) {
+          if (pageTotal === 2) {
+            var s1 = '<li><a class="jumpTo">1</a></li>' + '<li class="active"><a>2</a></li>';
+            var s2 = '<li class="active"><a>1</a></li>' + '<li><a class="jumpTo">2</a></li>';
+            s += (pageNow === 1) ? s2 : s1;
+          } else {
+            s += '<li class="active"><a>1</a></li>';
+          }
+        } else if (pageNow > 1 && pageNow < pageTotal) {
+          s += '<li><a class="jumpTo">' + (parseInt(pageNow) - 1) + '</a></li>' + 
+              '<li class="active"><a>' + pageNow  + '</a></li>' + 
+              '<li><a class="jumpTo">' + (parseInt(pageNow) + 1)  + '</a></li>';
+        } else if (pageNow === 1) {
+          s += '<li class="active"><a>1</a></li>' + 
+              '<li><a class="jumpTo">2</a></li>' + 
+              '<li><a class="jumpTo">3</a></li>';
+        } else if (pageNow === pageTotal) {
+          s += '<li><a class="jumpTo">' + (parseInt(pageNow) - 2) + '</a></li>' + 
+              '<li><a class="jumpTo">' + (parseInt(pageNow) - 1) + '</a></li>' + 
+              '<li class="active"><a>' + pageNow + '</a></li>';
+        }
+
+        if (pageNow < pageTotal) {
+          s += '<li class="fa-hover none" id="pageNext">' +
+                '<a  aria-label="Next" class="i-height">' +
+                  '<i class="fa fa-chevron-right"></i>' +
+                '</a>'
+              '</li>'
+        }
+        s += '<li class="pagination-li">' +
+                '<sapn class="pagination-span-front">转到第</sapn><input class="pagination-input" id="jumpPage"><sapn class="pagination-span-back">页</sapn>' + 
+                  '<a class="btn btn-default pageButton" id="btnJump">确定</a>' +
+              '</li>';
+        $('#pagetion').empty();
+        $('#pagetion').append(s);
+      }
+    }
+  });
+  $('#tempModal').modal('show');
 }

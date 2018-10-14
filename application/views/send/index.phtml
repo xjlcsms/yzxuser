@@ -5,6 +5,63 @@
       .none {
         display: none;
       }
+      .pagination-li .pagination-span-front{
+        display: inline-block;
+        border: 1px solid #ebebeb;
+        border-right: 0px;
+        height: 29px;
+        width: 45px;
+        vertical-align: middle;
+        text-align: center;
+        line-height: 29px;
+        color: #919191;
+        background-color: #f3f3f3;
+        margin-left: 10px;
+      }
+      .pagination-li input.pagination-input{
+        display: inline-block;
+        line-height: 1.4;
+        border:1px solid #ebebeb;
+        background-color: #fff;
+        height: 29px;
+        width: 40px;
+      }
+      .pull-right .pagination-sm .i-height i:before{
+
+      }
+       .checkbox input.pagination-input{
+        display: inline-block;
+        line-height: 1.4;
+        border:1px solid #ebebeb;
+        background-color: #fff;
+        height: 26px;
+        width: 30px;
+       }
+       .form-group label.label-font-size{
+        font-size: 14px;
+       }
+      .pagination-li .pagination-span-back{
+        display: inline-block;
+        border: 1px solid #ebebeb;
+        border-left: 0px;
+        height: 29px;
+        width: 35px;
+        vertical-align: middle;
+        text-align: center;
+        line-height: 29px;
+        color: #919191;
+        background-color: #f3f3f3;
+      }
+      .pagination-li a#btnJump{
+        float: right;
+      }
+      .pagination-wrapper .dataTables_paginate a {
+        background-color: #fff !important;
+      }
+      .pagination-wrapper .pagination>.active>a {
+        color: #fff;
+        background-color: #337ab7 !important;
+      }
     </style>
     <div class="right_col" role="main">
       <div class="">
@@ -137,6 +194,32 @@
               <tbody id="templateTable">
               </tbody>
             </table>
+            <div class="row">
+              <div class="col-xs-6 col-left" >
+                <div class="dataTables_info">总共<span id="dataTotal">0</span>条数据</div>
+              </div>
+              <div class="col-xs-6 col-right pagination-wrapper">
+                <div class="dataTables_paginate paging_bootstrap pull-right">
+                  <ul class="pagination pagination-sm" style="margin: 0px; padding: 0px;" id="pagetion">
+<!--                     <li class="fa-hover none" id="pagePrev">
+                      <a aria-label="Previous">
+                        <i class="fa fa-chevron-left"></i>
+                      </a>
+                    </li>
+                    <li class="fa-hover none" id="pageNext">
+                      <a  aria-label="Next" class="i-height">
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    </li> -->
+
+                    <!-- <li class="pagination-li">
+                      <sapn class="pagination-span-front">转到第</sapn><input class="pagination-input" name="inputPage" id="inputPage"><sapn class="pagination-span-back">页</sapn>
+                      <a href="" class="btn btn-default pageButton" id="pagination-a">确定</a>
+                    </li> -->
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

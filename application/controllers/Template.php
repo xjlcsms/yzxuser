@@ -122,7 +122,7 @@ class TemplateController extends \Base\ApplicationController
         $page = $this->getParam('page', 1, 'int');
         $pagelimit = $this->getParam('pagelimit', 5, 'int');
         $pager = new \Ku\Page($select, $page, $pagelimit, $mapper->getAdapter());
-        $data = array('list'=>$pager->getList(),'page'=>$page,'total'=>$pager->getItemTotal());
+        $data = array('list'=>$pager->getList(),'page'=>$page,'total'=>$pager->getItemTotal(), 'pageCount'=>$pager->getPageCount());
         return $this->returnData('成功',1001,true,$data);
     }
 
