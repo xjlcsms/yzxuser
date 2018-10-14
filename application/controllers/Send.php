@@ -13,15 +13,7 @@ class SendController extends \Base\ApplicationController{
      */
     public function indexAction(){
         $this->assign('sendTypes',$this->_sendTypes);
-        $user = \Business\LoginModel::getInstance()->getLoginUser();
-        $temps = \Mapper\TemplatesModel::getInstance()->fetchAll(array('user_id'=>$user->getId()));
-        $templates = [];
-        if(!empty($temps)){
-            foreach ($temps as $temp){
-                $templates[$temp->getTemplate_id()] = $temp->toArray();
-            }
-        }
-        $this->assign('templates',$templates);
+
     }
 
     /**
@@ -198,6 +190,20 @@ class SendController extends \Base\ApplicationController{
         }
         if(empty($mobiles)){
             return $this->returnData('没有获取到有效的手机号',29202);
+        }
+        if($tempId){
+            $template = \Mapper\TemplatesModel::getInstance()->fetch(array('id'=>$tempId,'user_id'=>$user->getId()));
+            if($template instanceof \TemplatesModel and $template->getType()==2){
+                $content = str_replace('【'.$sign.'】','',$content);
+                $params = explode(';',$content);
+                $tContent = $template->getContent();
+                $tContent = str_replace('{}','%s',$tContent);
+                array_unshift($params,$tContent);
+                $content = call_user_func_array('sprintf',$params);
+            }else{
+                $content = $template->getContent();
+            }
+            $content = '【'.$sign.'】'.$content;
         }
         //发送的总数
         $totalfee = $smsBusiness->totalFee($mobiles,$content);

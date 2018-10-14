@@ -93,6 +93,20 @@ class TemplateController extends \Base\ApplicationController
         return $this->returnData('添加成功',31003,true);
     }
 
+    /**获取模板数据
+     * @return false
+     */
+    public function mytempAction(){
+        $user = \Business\LoginModel::getInstance()->getLoginUser();
+        $temps = \Mapper\TemplatesModel::getInstance()->fetchAll(array('user_id'=>$user->getId()));
+        $templates = [];
+        if(!empty($temps)){
+            foreach ($temps as $temp){
+                $templates[] = $temp->toArray();
+            }
+        }
+        return $this->returnData('成功',1001,true,$templates);
+    }
 
     /**获取模板内容
      * @return false
