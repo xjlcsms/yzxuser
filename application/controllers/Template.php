@@ -98,14 +98,32 @@ class TemplateController extends \Base\ApplicationController
      */
     public function mytempAction(){
         $user = \Business\LoginModel::getInstance()->getLoginUser();
-        $temps = \Mapper\TemplatesModel::getInstance()->fetchAll(array('user_id'=>$user->getId()));
-        $templates = [];
-        if(!empty($temps)){
-            foreach ($temps as $temp){
-                $templates[] = $temp->toArray();
-            }
+        $where = array('user_id'=>$user->getId(),'status'=>1);
+        $type = $this->getParam('type',0,'int');
+        $classify = $this->getParam('classify',0,'int');
+        $sign = $this->getParam('sign','','string');
+        $tempId = $this->getParam('tempid','','int');
+        if($tempId){
+            $where['template_id'] = $tempId;
         }
-        return $this->returnData('成功',1001,true,$templates);
+        if($classify){
+            $where['classify'] =$classify;
+        }
+        if($type){
+            $where['type'] = $type;
+        }
+        if($sign){
+            $where[] = "sign like '%".$sign."%'";
+        }
+        $mapper = \Mapper\TemplatesModel::getInstance();
+        $select = $mapper->select();
+        $select->where($where);
+        $select->order(array('created_at desc'));
+        $page = $this->getParam('page', 1, 'int');
+        $pagelimit = $this->getParam('pagelimit', 5, 'int');
+        $pager = new \Ku\Page($select, $page, $pagelimit, $mapper->getAdapter());
+        $data = array('list'=>$pager->getList(),'page'=>$page,'total'=>$pager->getItemTotal());
+        return $this->returnData('成功',1001,true,$data);
     }
 
     /**获取模板内容

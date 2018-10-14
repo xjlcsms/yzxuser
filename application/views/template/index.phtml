@@ -12,7 +12,7 @@
             <div class="text-muted font-13 m-b-30">
               <div class="dataTables_wrapper dt-bootstrap no-footer">
                 <div class="row">
-                  <div class="col-sm-10">
+                  <div class="col-sm-10 col-md-10">
                     <form class="search-form" method="get" action="">
                       <span>审核状态</span>
                       <label>
@@ -51,6 +51,7 @@
                         <input type="text" class="form-control input-sm" placeholder="模板内容" name="content" value="<?php echo $this->content;?>">
                       </label>
                       <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+                      <a class="btn btn-primary btn-sm" href="javascript:;" id="addTemplate">添加模板</a>
                     </form>
                   </div>
                   <div class="col-sm-2">
@@ -111,4 +112,63 @@
           </div>
         </div>
       </div>
+      <div class="modal fade bs-example-modal-md" id="openModal">
+        <div class="modal-dialog modal-md">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+              </button>
+              <h4 class="modal-title">添加模板</h4>
+              <p id="errMsg" style="color: red;" class="none">11</p>
+            </div>
+            <div class="modal-body open-user-modal">
+              <form class="form-horizontal form-label-left" id="templateForm">
+                <div class="form-group">
+                  <label class="control-label col-sm-3">模板类型</label>
+                  <div class="col-md-9 col-sm-9 col-xs-12">
+                    <div class="radio col-md-3">
+                      <label><input type="radio" name="type" value="1" checked>行业短信</label>
+                    </div>
+                    <div class="radio col-md-3">
+                      <label><input type="radio" name="type" value="2">营销短息</label>
+                    </div>
+                    <div class="radio col-md-3">
+                      <label><input type="radio" name="type" value="3">特殊短信</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-3">模板属性</label>
+                  <div class="col-md-9 col-sm-9 col-xs-12">
+                    <div class="radio col-md-3">
+                      <label><input type="radio" name="classify" value="1" checked>固定模板</label>
+                    </div>
+                    <div class="radio col-md-3">
+                      <label><input type="radio" name="classify" value="2">变量模板</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-3">模板签名</label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input name="sign" type="text" class="form-control" placeholder="请输入模板签名">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-3">模板内容</label>
+                  <div class="col-md-8 col-sm-8 col-xs-12">
+                    <textarea name="content" placeholder="请输入模板内容" class="form-control" style="height: 80px;"></textarea>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="addBtn">添加模板</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="/script/template/index.js"></script>
 <?php $this->display("public/footer.phtml"); ?>

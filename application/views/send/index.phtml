@@ -79,19 +79,16 @@
               <div class="form-group">
                 <label class="control-label col-sm-2">选择模板</label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                  <form enctype="multipart/form-data" id="modleForm">
-                    <input type="file" name="file" id="modleFile">
-                  </form>
+                  <a class="btn btn-primary btn-sm" id="showTemplate">点击选择</a>
                 </div>
               </div>
               <div class="form-group">
                 <label class="control-label col-sm-2 col-lg-2">短信类型</label>
                 <div class="col-sm-1 col-lg-2">
                   <select class="form-control" name="smstype">
-                    <option>请选择</option>
-                    <option>验证码</option>
-                    <option>通知</option>
-                    <option>营销</option>
+                    <option value="1" checked>验证码</option>
+                    <option value="2">通知</option>
+                    <option value="3">营销</option>
                   </select>
                 </div>
                 <label class="control-label col-sm-1">短信签名</label>
@@ -107,11 +104,39 @@
               </div>
               <div class="form-group">
                 <label class="control-label col-sm-2">统计：</label>
-                <label class="control-label col-sm-2" style="text-align: left;">内容长度计费条数:<span id="branch"></span>条 总计费条数:0条</label>
-                <label class="control-label col-sm-4"><span id="num">0</span>/500</label>
+                <label class="control-label col-sm-5" style="text-align: left;">内容长度计费条数:<span id="branch"></span>条 总计费条数:<span id="use"></span>条</label>
+                <label class="control-label col-sm-2"><span id="num">0</span>/500</label>
               </div>
               <a class="btn btn-primary btn-sm col-sm-offset-2" id="sendBtn">发送</a>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-md" id="tempModal">
+      <div class="modal-dialog modal-md"  style="width: 800px">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">模板列表</h4>
+          </div>
+          <div class="modal-body open-user-modal">
+            <table id="datatable" class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>模板ID</th>
+                  <th>模板属性</th>
+                  <th>模板类型</th>
+                  <th>模板内容</th>
+                  <th>短信签名</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="templateTable">
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
