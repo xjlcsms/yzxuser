@@ -174,7 +174,7 @@ class SendController extends \Base\ApplicationController{
         $user = \Business\LoginModel::getInstance()->getLoginUser();
         $recordMapper = \Mapper\RecorduserModel::getInstance();
         $recordMapper->setTable('record_user_'.$user->getId());
-        $where =array('user_id'=>$user->getId());
+        $where =array();
         $taskId = $this->getParam('taskId',0,'int');
         if($taskId){
             $where['task_id'] = $taskId;
