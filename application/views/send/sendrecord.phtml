@@ -81,7 +81,7 @@
                                     <td><?php echo $value['masked_phone'];?></td>
                                     <?php if($value['task_id']==0):?>
                                         <td><?php echo $value['content'];?></td>
-                                    <?php else: $taskMapper = \Mapper\SendtasksModel::getInstance();?>
+                                    <?php else: $taskMapper = \Mapper\SmsqueueModel::getInstance();?>
                                         <td><?php echo $taskMapper->getContent($value['task_id']);?></td>
                                     <?php endif;?>
                                     <td style="line-height: 34px;overflow: hidden;width: 200px"><?php echo $this->statusData[$value['status']]?></td>
