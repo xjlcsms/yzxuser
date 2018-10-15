@@ -122,6 +122,17 @@ class SendController extends \Base\ApplicationController{
         $mapper = \Mapper\SmsrecordModel::getInstance();
         $user = \Business\LoginModel::getInstance()->getLoginUser();
         $where =array('user_id'=>$user->getId());
+        $taskId = $this->getParam('taskId',0,'int');
+        if($taskId){
+//            $recordMapper = \Mapper\RecorduserModel::getInstance();
+//            $recordMapper->setTable('record_user_'.$user->getId());
+            $record = $mapper->findByTask_Id($taskId);
+            if(!$record instanceof \SmsrecordModel){
+                $this->redirect('/send/oldrecord');
+            }
+            $where['task_id'] = $taskId;
+        }
+        $this->assign('taskId',$taskId);
         $mobile = $this->getParam('mobile','','string');
         $content = $this->getParam('content','','string');
         $status = $this->getParam('status',100,'int');
@@ -147,11 +158,6 @@ class SendController extends \Base\ApplicationController{
             $where['sms_type'] = $type;
         }
         $this->assign('type',$type);
-        $taskId = $this->getParam('taskId',0,'int');
-        if($taskId){
-            $where['task_id'] = $taskId;
-        }
-        $this->assign('taskId',$taskId);
         $select = $mapper->select();
         $select->where($where);
         $select->order(array('created_at desc'));
@@ -163,6 +169,54 @@ class SendController extends \Base\ApplicationController{
         $this->assign('types', $this->_sendTypes);
         $this->assign('statusData', array('待发送','成功','失败'));
     }
+
+    public function oldrecordAction(){
+        $user = \Business\LoginModel::getInstance()->getLoginUser();
+        $recordMapper = \Mapper\RecorduserModel::getInstance();
+        $recordMapper->setTable('record_user_'.$user->getId());
+        $where =array('user_id'=>$user->getId());
+        $taskId = $this->getParam('taskId',0,'int');
+        if($taskId){
+            $where['task_id'] = $taskId;
+        }
+        $this->assign('taskId',$taskId);
+        $mobile = $this->getParam('mobile','','string');
+        $content = $this->getParam('content','','string');
+        $status = $this->getParam('status',100,'int');
+        $report_status = $this->getParam('report_status',100,'int');
+        if(!empty($mobile)){
+            $where['mobile'] = $mobile;
+        }
+        $this->assign('mobile',$mobile);
+        if($content){
+            $where[] = "content like '%".$content."%'";
+        }
+        $this->assign('content',$content);
+        if ($status != 100){
+            $where['status'] = $status;
+        }
+        $this->assign('status',$status);
+        if ($report_status != 100){
+            $where['report_status'] = $report_status;
+        }
+        $this->assign('report_status',$report_status);
+        $type = $this->getParam('type',0,'int');
+        if($type){
+            $where['sms_type'] = $type;
+        }
+        $this->assign('type',$type);
+        $select = $recordMapper->select();
+        $select->where($where);
+        $select->order(array('created_at desc'));
+        $page = $this->getParam('page', 1, 'int');
+        $pagelimit = $this->getParam('pagelimit', 15, 'int');
+        $pager = new \Ku\Page($select, $page, $pagelimit, $recordMapper->getAdapter());
+        $this->assign('pager', $pager);
+        $this->assign('pagelimit', $pagelimit);
+        $this->assign('types', $this->_sendTypes);
+        $this->assign('statusData', array('待发送','成功','失败'));
+    }
+
     /**
      * 发送短信
      * @return false
