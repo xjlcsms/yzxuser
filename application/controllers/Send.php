@@ -124,11 +124,9 @@ class SendController extends \Base\ApplicationController{
         $where =array('user_id'=>$user->getId());
         $taskId = $this->getParam('taskId',0,'int');
         if($taskId){
-//            $recordMapper = \Mapper\RecorduserModel::getInstance();
-//            $recordMapper->setTable('record_user_'.$user->getId());
             $record = $mapper->findByTask_Id($taskId);
             if(!$record instanceof \SmsrecordModel){
-                $this->redirect('/send/oldrecord');
+                return $this->redirect('/send/oldrecord?taskId='.$taskId);
             }
             $where['task_id'] = $taskId;
         }
