@@ -22,7 +22,8 @@ class SendController extends \Base\ApplicationController{
     public function sendtaskAction(){
         $user = \Business\LoginModel::getInstance()->getLoginUser();
         $where =array('user_id'=>$user->getId());
-        $time = $this->getParam('time','','string');
+        $request = $this->request();
+        $time = $request->get('time','');
         if(!empty($time)){
             $timeArr = explode('-',$time);
             $begin = date('Y-m-d',strtotime(trim($timeArr[0])));
