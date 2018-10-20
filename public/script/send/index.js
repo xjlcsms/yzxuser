@@ -96,7 +96,7 @@ var pageTotall = 1;
           $('#fileName').text(res.data.filename);
           $('#totalNum').text(res.data.total);
           $('#useNum').text(res.data.true);
-          unum = res.data.true;
+          showLen($('#content').val());
           $('#errNum').text(res.data.repeat);
           $('#reNum').text(res.data.repeat);
           $('#auto').addClass('none');
@@ -121,12 +121,14 @@ var pageTotall = 1;
         $('#smsFile').val('');
         $('#result').addClass('none');
         $('#auto').removeClass('none');
+        $('#useNum').text('');
+        showLen($('#content').val());
       } else {
         alert(res.msg);
       }
     })
   });
-
+  // 发送事件
   $('#sendBtn').click(function() {
     if ($('input[name="type"]:checked').val() == 1) {
         // 自行发送
@@ -166,7 +168,7 @@ var pageTotall = 1;
         }
       })
     }
-  })
+  });
   // 显示模板
   $('#showTemplate').click(function() {
     showTemp(1)
@@ -197,20 +199,38 @@ var pageTotall = 1;
     $('#templateTable').empty();
     $('#tempModal').modal('hide');
     showLen(content);
+  });
+  // 监听发送方式
+  $('input[name=type]').change(function() {
+   showLen($('#content').val())
+  });
+  // 监听号码池
+  $('input[name=leadtype]').change(function() {
+    showLen($('#content').val())
   })
+  // 监听手机数量输入
+  $('#quantity').bind('input propertychange', function() { 
+    showLen($('#content').val());
+  });
+  // 监听手机输入
+  $('textarea[name="phoneText"]').bind('input propertychange', function() { 
+    showLen($('#content').val());
+  });
 })()
 
 function showLen(content) {
   var len = 0;
-  var branch = 1;
-
+  var branch = 0;
+  var mobileArr = [];
   len = content.length;
   if (len >= 498 ) {
     content = content.substring(0,500);
   }
   len = content.length;
-  if (len <= 70) {
+  if (len <= 70 && len != 0) {
+    branch = 1;
   } else {
+    branch = 1;
     if ((len - 70) % 68 == 0) {
       branch += (len - 70)/68;
     } else {
@@ -221,12 +241,26 @@ function showLen(content) {
   $('#num').text(len);
   $('#branch').text(parseInt(branch));
 
+  if ($('input[name="type"]:checked').val() == 1 && $('input[name="leadtype"]:checked').val() == 1) {
+    unum = $('#useNum').text() != '' ? parseInt($('#useNum').text()) : 0;
+  }
   if ($('input[name="type"]:checked').val() == 1 && $('input[name="leadtype"]:checked').val() == 2) {
+    unum = 0;
     if ($('#phoneText').val() != '') {
-      unum = $('#phoneText').val().split(',').length;
+      if ($('#phoneText').val().indexOf('，') > -1) {
+        mobileArr = $('#phoneText').val().split('，');
+      } else {
+        mobileArr = $('#phoneText').val().split(',');
+      }
+      for (var i in mobileArr) {
+        if (mobileArr[i].length == 11) {
+          unum++
+        }
+      }
     }
   }
   if ($('input[name="type"]:checked').val() == 2) {
+    unum = 0;
     if ($('#quantity').val() != '') {
       unum = $('#quantity').val();
     }
