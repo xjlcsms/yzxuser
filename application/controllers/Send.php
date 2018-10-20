@@ -22,8 +22,7 @@ class SendController extends \Base\ApplicationController{
     public function sendtaskAction(){
         $user = \Business\LoginModel::getInstance()->getLoginUser();
         $where =array('user_id'=>$user->getId());
-        $request = $this->request();
-        $time = $request->get('time','');
+        $time = $this->getParam('time','','string');
         if(!empty($time)){
             $timeArr = explode('-',$time);
             $begin = date('Y-m-d',strtotime(trim($timeArr[0])));
@@ -142,7 +141,7 @@ class SendController extends \Base\ApplicationController{
         $status = $this->getParam('status',100,'int');
         $report_status = $this->getParam('report_status',100,'int');
         if(!empty($mobile)){
-            $where['mobile'] = $mobile;
+            $where['phone'] = $mobile;
         }
         $this->assign('mobile',$mobile);
         if($content){
