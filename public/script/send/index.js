@@ -220,6 +220,17 @@ function showLen(content) {
   $('#content').val(content);
   $('#num').text(len);
   $('#branch').text(parseInt(branch));
+
+  if ($('input[name="type"]:checked').val() == 1 && $('input[name="leadtype"]:checked').val() == 2) {
+    if ($('#phoneText').val() != '') {
+      unum = $('#phoneText').val().split(',').length;
+    }
+  }
+  if ($('input[name="type"]:checked').val() == 2) {
+    if ($('#quantity').val() != '') {
+      unum = $('#quantity').val();
+    }
+  }
   $('#use').text(parseInt(branch) * unum);
 }
 

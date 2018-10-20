@@ -35,6 +35,11 @@ class SendController extends \Base\ApplicationController{
             $where['sms_type'] = $type;
         }
         $this->assign('type',$type);
+        $status = $this->getParam('status',100,'int');
+        if($type){
+            $where['status'] = $status;
+        }
+        $this->assign('status',$status);
         $sign = $this->getParam('sign','','string');
         if($sign){
             $where[] = "sign like '%".$sign."%'";

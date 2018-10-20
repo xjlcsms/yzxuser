@@ -16,7 +16,7 @@
                     <form class="search-form" method="get" action="">
                       <span>审核状态</span>
                       <label>
-                        <select class="form-control input-sm" name="templateStatus">
+                        <select class="form-control input-sm" name="status">
                           <option value="0">全部</option>
                           <?php foreach ($this->templateStatus as $key =>$value):?>
                             <option value="<?php echo $key;?>" <?php echo $key==$this->status?'selected':'';?>><?php echo $value;?></option>
@@ -25,7 +25,7 @@
                       </label>
                       <span>模板属性</span>
                       <label>
-                        <select class="form-control input-sm" name="accounts">
+                        <select class="form-control input-sm" name="classify">
                           <option value="0">全部</option>
                           <?php foreach ($this->accounts as $key =>$value):?>
                             <option value="<?php echo $key;?>" <?php echo $key==$this->classify?'selected':'';?>><?php echo $value;?></option>
@@ -34,8 +34,8 @@
                       </label>
                       <span>模板类型</span>
                       <label>
-                        <select class="form-control input-sm" name="types">
-                          <option value="0">全部</option>
+                        <select class="form-control input-sm" name="type">
+                          <option value="0"  <?php echo $this->type==0?'checked':''?>>全部</option>
                           <?php foreach ($this->types as $key =>$value):?>
                             <option value="<?php echo $key;?>" <?php echo $key==$this->type?'selected':'';?>><?php echo $value;?></option>
                           <?php endforeach;?>
@@ -130,7 +130,7 @@
                       <label><input type="radio" name="type" value="1" checked>行业短信</label>
                     </div>
                     <div class="radio col-md-3">
-                      <label><input type="radio" name="type" value="2">营销短息</label>
+                      <label><input type="radio" name="type" value="2">营销短信</label>
                     </div>
                     <div class="radio col-md-3">
                       <label><input type="radio" name="type" value="3">特殊短信</label>
