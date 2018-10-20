@@ -131,9 +131,9 @@ var pageTotall = 1;
     if ($('input[name="type"]:checked').val() == 1) {
         // 自行发送
       var params = {
-        type: $('input[name="type"]:checked').val(),
+        smstype: $('input[name="type"]:checked').val(),
         tempId: tempId,
-        smstype: $('select[name="smstype"]').val(),
+        type: $('select[name="smstype"]').val(),
         content: $('#content').val(),
         sign: $('#sign').val(),
         smsfile: $('#fileName').text(),
@@ -150,8 +150,9 @@ var pageTotall = 1;
     } else {
       // 信嘉联创代发
       var params = {
-        type: $('input[name="type"]:checked').val(),
+        smstype: $('input[name="type"]:checked').val(),
         tempId: tempId,
+        type: $('select[name="smstype"]').val(),
         area: $('input[name="area"]').val(),
         amount: $('input[name="quantity"]').val(),
         content: $('#content').val(),
