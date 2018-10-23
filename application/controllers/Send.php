@@ -60,7 +60,7 @@ class SendController extends \Base\ApplicationController{
         $this->assign('pager', $pager);
         $this->assign('pagelimit', $pagelimit);
         $this->assign('types', $this->_sendTypes);
-        $this->assign('statusData', array('待发送','成功','失败'));
+        $this->assign('statusData', array('发送中','成功','失败'));
 
     }
      /**
@@ -76,7 +76,7 @@ class SendController extends \Base\ApplicationController{
             $end = date('Y-m-d',strtotime(trim($timeArr[1])));
             $where[] = "created_at >='".$begin." 00:00:00' and created_at <= '".$end." 23:59:59'";
         }
-        $type = $this->getParam('type',2,'int');
+        $type = $this->getParam('type',0,'int');
         if($type){
             $where['sms_type'] = $type;
         }
@@ -100,18 +100,18 @@ class SendController extends \Base\ApplicationController{
             $feeone = $business->oneFee($list->getContent());
             if (isset($data[$date])){
                 $data[$date]['total'] += $list->getTotal_num();
-                $data[$date]['success'] += $list->getSuccess();
                 $notArrive = $list->getTotal_num() - $list->getSend_num();
+                $data[$date]['success'] += $list->getSuccess() + $notArrive;
                 $fail = $list->getSend_num() - $list->getSuccess();
-                $data[$date]['not_arrive'] += $notArrive;
+                $data[$date]['not_arrive'] = 0;
                 $data[$date]['fail'] += $fail;
                 $data[$date]['fee'] += $feeone * $list->getSend_num();
             }else{
                 $data[$date]['total'] = $list->getTotal_num();
-                $data[$date]['success'] = $list->getSuccess();
                 $notArrive = $list->getTotal_num() - $list->getSend_num();
+                $data[$date]['success'] = $list->getSuccess() + $notArrive;
                 $fail = $list->getSend_num() - $list->getSuccess();
-                $data[$date]['not_arrive'] = $notArrive;
+                $data[$date]['not_arrive'] = 0;
                 $data[$date]['fail'] = $fail;
                 $data[$date]['fee'] = $feeone * $list->getSend_num();
             }
@@ -170,7 +170,7 @@ class SendController extends \Base\ApplicationController{
         $this->assign('pager', $pager);
         $this->assign('pagelimit', $pagelimit);
         $this->assign('types', $this->_sendTypes);
-        $this->assign('statusData', array('待发送','成功','失败'));
+        $this->assign('statusData', array('发送中','成功','失败'));
     }
 
     public function oldrecordAction(){
@@ -217,7 +217,7 @@ class SendController extends \Base\ApplicationController{
         $this->assign('pager', $pager);
         $this->assign('pagelimit', $pagelimit);
         $this->assign('types', $this->_sendTypes);
-        $this->assign('statusData', array('待发送','成功','失败'));
+        $this->assign('statusData', array('发送中','成功','失败'));
     }
 
     /**
