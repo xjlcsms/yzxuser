@@ -160,8 +160,7 @@ var pageTotall = 1;
         sign: $('#sign').val(),
       }
       $.post('/index/send/syssms', params, function(res) {
-        if (res.status === true) {
-          alert(res.msg);
+        if (res.status == true) {
           window.location.href="/index/send/sendtask";
         } else {
           alert(res.msg)
