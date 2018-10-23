@@ -143,7 +143,6 @@ var pageTotall = 1;
       }
       $.post('/index/send/sms', params, function(res) {
         if (res.status === true) {
-          alert(res.msg);
           window.location.href="/index/send/sendtask";
         } else {
           alert(res.msg)
