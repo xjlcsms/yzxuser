@@ -325,7 +325,7 @@ class SendController extends \Base\ApplicationController{
         }
         \Mapper\SendtasksModel::getInstance()->update(array('status'=>1),array('id'=>$taskid));
         $smsMapper->commit();
-        return $this->returnData('发送成功',29201);
+        return $this->returnData('发送成功',29201, true);
     }
 
 
