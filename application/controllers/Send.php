@@ -163,7 +163,7 @@ class SendController extends \Base\ApplicationController{
         $this->assign('type',$type);
         $select = $mapper->select();
         $select->where($where);
-        $select->order(array('created_at desc'));
+        $select->order(array('id desc'));
         $page = $this->getParam('page', 1, 'int');
         $pagelimit = $this->getParam('pagelimit', 15, 'int');
         $pager = new \Ku\Page($select, $page, $pagelimit, $mapper->getAdapter());
@@ -171,6 +171,7 @@ class SendController extends \Base\ApplicationController{
         $this->assign('pagelimit', $pagelimit);
         $this->assign('types', $this->_sendTypes);
         $this->assign('statusData', array('发送中','成功','失败'));
+        $this->assign('reportStatus', array('发送中','已到达','未到达'));
     }
 
     public function oldrecordAction(){
@@ -210,7 +211,7 @@ class SendController extends \Base\ApplicationController{
         $this->assign('type',$type);
         $select = $recordMapper->select();
         $select->where($where);
-        $select->order(array('created_at desc'));
+        $select->order(array('id desc'));
         $page = $this->getParam('page', 1, 'int');
         $pagelimit = $this->getParam('pagelimit', 15, 'int');
         $pager = new \Ku\Page($select, $page, $pagelimit, $recordMapper->getAdapter());
@@ -218,6 +219,7 @@ class SendController extends \Base\ApplicationController{
         $this->assign('pagelimit', $pagelimit);
         $this->assign('types', $this->_sendTypes);
         $this->assign('statusData', array('发送中','成功','失败'));
+        $this->assign('reportStatus', array('发送中','已到达','未到达'));
     }
 
     /**
