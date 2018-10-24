@@ -92,7 +92,7 @@ class SendController extends \Base\ApplicationController{
             }
         }
         $mapper = \Mapper\SmsqueueModel::getInstance();
-        $lists = $mapper->fetchAll(array('task_id in('.implode(',',$taskIds).')'));
+        $lists = $mapper->fetchAll(array('task_id in('.implode(',',$taskIds).')'),array('created_at desc'));
         $data = [];
         $business = \Business\SmsModel::getInstance();
         foreach ($lists as $list){
@@ -171,7 +171,7 @@ class SendController extends \Base\ApplicationController{
         $this->assign('pagelimit', $pagelimit);
         $this->assign('types', $this->_sendTypes);
         $this->assign('statusData', array('发送中','成功','失败'));
-        $this->assign('reportStatus', array('发送中','已到达','未到达'));
+        $this->assign('reportStatus', array('发送中','成功','失败'));
     }
 
     public function oldrecordAction(){
@@ -219,7 +219,7 @@ class SendController extends \Base\ApplicationController{
         $this->assign('pagelimit', $pagelimit);
         $this->assign('types', $this->_sendTypes);
         $this->assign('statusData', array('发送中','成功','失败'));
-        $this->assign('reportStatus', array('发送中','已到达','未到达'));
+        $this->assign('reportStatus', array('发送中','成功','失败'));
     }
 
     /**
@@ -312,7 +312,7 @@ class SendController extends \Base\ApplicationController{
             $model->setUid($uid);
             $data = $smsBusiness->trueMobiles($user,$mobile);
             $model->setCreated_at(date('Ymdhis'));
-            $fail = empty($fail)?'':implode(',',$fail);
+            $fail = empty($data['fail'])?'':implode(',',$data['fail']);
             $model->setNot_arrive($fail);
             $true = implode(',',$data['true']);
             $model->setMobiles(empty($true)?'':$true);
