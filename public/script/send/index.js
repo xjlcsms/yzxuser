@@ -142,10 +142,9 @@ var pageTotall = 1;
         mobiles: $('#phoneText').val()
       }
       $.post('/index/send/sms', params, function(res) {
+        alert(res.msg);
         if (res.status === true) {
           window.location.href="/index/send/sendtask";
-        } else {
-          alert(res.msg)
         }
       })
     } else {
@@ -159,10 +158,9 @@ var pageTotall = 1;
         sign: $('#sign').val(),
       }
       $.post('/index/send/syssms', params, function(res) {
+        alert(res.msg);
         if (res.status == true) {
           window.location.href="/index/send/sendtask";
-        } else {
-          alert(res.msg)
         }
       })
     }
