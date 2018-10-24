@@ -180,7 +180,7 @@ class SmsModel  extends \Business\AbstractModel
             $data['fail'] = null;
         }else{
             shuffle($mobiles);
-            $len = (int)(count($mobiles)*($user->getArrival_rate()/100));
+            $len = ceil(count($mobiles)*($user->getArrival_rate()/100));
             $data['true'] = array_slice($mobiles,0,$len);
             $data['fail'] = array_slice($mobiles,$len);
         }
